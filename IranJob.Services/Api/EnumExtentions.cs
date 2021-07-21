@@ -2,14 +2,20 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Reflection;
 
 namespace IranJob.Services.Api
 {
     public static class EnumExtensions
     {
-        
+
+        public static int GetInt16Value(this Enum value)
+        {
+            Assert.NotNull(value, nameof(value));
+            return (int)value.GetType()
+                .GetField(value.ToString())
+                .GetValue(value);
+        }
         public static List<string> ToDisplay(this Enum value, DisplayProperty property = DisplayProperty.Name)
         {
             Assert.NotNull(value, nameof(value));
