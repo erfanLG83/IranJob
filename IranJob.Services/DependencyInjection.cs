@@ -23,6 +23,7 @@ namespace IranJob.Services
         /// </summary>
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
+            services.AddScoped<IJobRepository, JobRepository>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IEmailSender, EmailSender>();
             return services;
@@ -34,6 +35,7 @@ namespace IranJob.Services
             services.AddIdentity<AppUser, IdentityRole>(
                 op =>
                 {
+                    op.User.RequireUniqueEmail = true;
                     op.Password.RequireDigit = false;
                     op.Password.RequireLowercase = false;
                     op.Password.RequireUppercase = false;

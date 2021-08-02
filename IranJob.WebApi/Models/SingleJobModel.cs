@@ -9,9 +9,9 @@ namespace IranJob.WebApi.Models
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public int PastTime { get; set; }
+        public string PastTime { get; set; }
         public bool ImmediateEmployment { get; set; }
-        public string SkillsRequired { get; set; }
+        public string[] SkillsRequired { get; set; }
 
         public EnumObject ContractType { get; set; }
         public EnumObject Gender { get; set; }
@@ -21,6 +21,7 @@ namespace IranJob.WebApi.Models
         public int CompanyId { get; set; }
         public string CompanyName { get; set; }
         public string CompanyImage { get; set; }
+        public string CompanyDescription { get; set; }
 
         public int JobCategoryId { get; set; }
         public string JobCategoryTitle { get; set; }
@@ -38,10 +39,17 @@ namespace IranJob.WebApi.Models
             JobCategoryTitle = job.JobCategory.Title;
             CompanyId = job.CompanyId;
             CompanyName = job.Company.Name;
-            CompanyImage = job.Company.ImageName;
+            CompanyDescription = job.Description;
+            CompanyImage = ImagePaths.CompaniesPath + job.Company.ImageName;
             Description = job.Description;
-            PastTime = (DateTime.Now.Day * DateTime.Now.Month) - (job.PublishDate.Month * job.PublishDate.Day);
-            SkillsRequired = job.SkillsRequired;
+            int pastTimeDay = (DateTime.Now.Day * DateTime.Now.Month) - (job.PublishDate.Day * job.PublishDate.Month);
+            if (pastTimeDay == 0)
+                PastTime = "امروز";
+            else if (pastTimeDay == 1)
+                PastTime = "دیروز";
+            else
+                PastTime = $"{pastTimeDay} روز پیش";
+            SkillsRequired = job.SkillsRequired.Split(',');
             ImmediateEmployment = job.ImmediateEmployment;
             ContractType = job.ContractType;
             Gender = job.Gender;

@@ -50,8 +50,6 @@ namespace IranJob.Services.Implementation
             _userStore = userStore;
             _userValidators = userValidators;
         }
-
-
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
         {
             return await Users.ToListAsync();

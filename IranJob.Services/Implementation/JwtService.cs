@@ -37,7 +37,7 @@ namespace IranJob.Services.Implementation
                 Audience = "IranJob",
                 IssuedAt = DateTime.Now,
                 NotBefore = DateTime.Now.AddMinutes(0),
-                Expires = DateTime.Now.AddMinutes(2),
+                Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = signinCredentials,
                 Subject = new ClaimsIdentity(await GetClaimsAsync(user)),
                 EncryptingCredentials = encryptionCredentials

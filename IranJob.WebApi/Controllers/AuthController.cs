@@ -55,18 +55,21 @@ namespace IranJob.WebApi.Controllers
             };
             var result = await _userManager.CreateAsync(user,signUp.Password);
             if (!result.Succeeded)
-                return new BadRequestResult();
-            return new
             {
-                token = await _jwtService.GenerateTokenAsync(user),
-                userName = user.UserName,
-                fullName = user.FullName
-            };
+                HttpContext.Response.StatusCode = 400;
+                return BadRequest(result.Errors);
+            }
+                //return new ApiResult<object>(false,ApiResultStatusCode.BadRequest,
+                //    null,
+                //    result.Errors.Select(x=>x.Description).ToList()
+                //    );
+                HttpContext.Response.StatusCode = 201;
+            return Created("~/api/auth/signup",signUp);
         }
 
         [HttpGet]
         [Authorize]
-        public ApiResult TestAutorize()
+        public ApiResult TestAuthorize()
         {
             return Ok();
         }

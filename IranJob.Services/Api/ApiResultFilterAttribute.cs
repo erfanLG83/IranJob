@@ -45,8 +45,8 @@ namespace IranJob.Services.Api
 
             else if (context.Result is ContentResult contentResult)
             {
-                List<string> Message = new List<string>() { contentResult.Content };
-                var apiResult = new ApiResult(true, ApiResultStatusCode.Success, Message);
+                List<string> Messages = new List<string>() { contentResult.Content };
+                var apiResult = new ApiResult(true, ApiResultStatusCode.Success, Messages);
                 context.Result = new JsonResult(apiResult) { StatusCode = contentResult.StatusCode };
             }
             else if (context.Result is NotFoundResult notFoundResult)

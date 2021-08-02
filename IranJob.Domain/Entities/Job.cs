@@ -11,6 +11,8 @@ namespace IranJob.Domain.Entities
         public DateTime PublishDate { get; set; }
         public bool ImmediateEmployment { get; set; }
         public string SkillsRequired { get; set; }
+        public bool Finished { get; set; }
+        public string EndTimeJobId { get; set; }
 
         public ContractType ContractType { get; set; }
         public Gender Gender { get; set; }

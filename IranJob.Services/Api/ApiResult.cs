@@ -12,13 +12,13 @@ namespace IranJob.Services.Api
         public ApiResultStatusCode StatusCode { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public List<string> Message { get; set; }
+        public List<string> Messages { get; set; }
 
         public ApiResult(bool isSuccess, ApiResultStatusCode statusCode, List<string> message = null)
         {
             IsSuccess = isSuccess;
             StatusCode = statusCode;
-            Message = message ?? statusCode.ToDisplay();
+            Messages = message ?? statusCode.ToDisplay();
         }
 
         #region Implicit Operators
@@ -57,8 +57,8 @@ namespace IranJob.Services.Api
 
         public static implicit operator ApiResult(ContentResult result)
         {
-            List<string> Message = new List<string>() { result.Content };
-            return new ApiResult(true, ApiResultStatusCode.Success, Message);
+            List<string> Messages = new List<string>() { result.Content };
+            return new ApiResult(true, ApiResultStatusCode.Success, Messages);
         }
 
         public static implicit operator ApiResult(NotFoundResult result)
@@ -128,8 +128,8 @@ namespace IranJob.Services.Api
 
         public static implicit operator ApiResult<TData>(ContentResult result)
         {
-            List<string> Message = new List<string>() { result.Content };
-            return new ApiResult<TData>(true, ApiResultStatusCode.Success, null, Message);
+            List<string> messages = new List<string>() { result.Content };
+            return new ApiResult<TData>(true, ApiResultStatusCode.Success, null, messages);
         }
 
         public static implicit operator ApiResult<TData>(NotFoundResult result)
@@ -139,6 +139,11 @@ namespace IranJob.Services.Api
         public static implicit operator ApiResult<TData>(NotFoundObjectResult result)
         {
             return new ApiResult<TData>(false, ApiResultStatusCode.NotFound, (TData)result.Value);
+        }
+
+        public static implicit operator ApiResult<TData>(CreatedResult result)
+        {
+            return new ApiResult<TData>(true, ApiResultStatusCode.Success, (TData)result.Value);
         }
         #endregion
 

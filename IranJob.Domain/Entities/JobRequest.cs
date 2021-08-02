@@ -13,6 +13,8 @@ namespace IranJob.Domain.Entities
         [Required]
         public string PhoneNumber { get; set; }
 
+        public DateTime Date { get; set; }
+
         public int JobId { get; set; }
         public Job Job { get; set; }
 

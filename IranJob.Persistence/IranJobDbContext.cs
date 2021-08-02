@@ -16,7 +16,8 @@ namespace IranJob.Persistence
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=.;Database=IranJobDB;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=.\\MSSQLSERVER2016;Database=erfanla1_IranJobDB;User ID=erfanla1_biglg;password=$n9s44wZ;Trusted_Connection=True;MultipleActiveResultSets=true;Integrated Security=False");
+            //optionsBuilder.UseSqlServer("Server=.;Database=IranJobDB;Trusted_Connection=True;");
             base.OnConfiguring(optionsBuilder);
         }
 

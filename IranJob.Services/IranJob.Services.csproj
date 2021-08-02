@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="MailKit" Version="2.13.0" />
+    <PackageReference Include="MD.PersianDateTime.Core" Version="2.3.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />

@@ -1,14 +1,14 @@
-﻿using IranJob.Services.Exeptions;
+﻿using IranJob.Services.Api;
+using IranJob.Services.Exeptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using IranJob.Services.Api;
 
 namespace IranJob.Services.Middlewares
 {
@@ -16,23 +16,27 @@ namespace IranJob.Services.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly IHostingEnvironment _env;
-        public CustomExeptionHandlerMiddleware(RequestDelegate next , IHostingEnvironment env)
+        private readonly IConfiguration _configuration;
+        public CustomExeptionHandlerMiddleware(RequestDelegate next, IHostingEnvironment env, IConfiguration configuration)
         {
             _env = env;
             _next = next;
+            _configuration = configuration;
         }
         public async Task Invoke(HttpContext context)
         {
             List<string> messages = new List<string>();
             HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
             ApiResultStatusCode apiResultStatus = ApiResultStatusCode.ServerError;
+            var isDevlopement = _configuration["ShowExpetions"] == "true";
             try
             {
                 await _next(context);
             }
             catch (ApiUnAutorizationExcpetion ex)
             {
-                if (_env.IsDevelopment())
+                apiResultStatus = ApiResultStatusCode.UnAuthorized;
+                if (isDevlopement)
                 {
                     var error = new Dictionary<string, string>
                     {
@@ -49,7 +53,7 @@ namespace IranJob.Services.Middlewares
             }
             catch (Exception ex)
             {
-                if (_env.IsDevelopment())
+                if (isDevlopement)
                 {
                     var error = new Dictionary<string, string>
                     {
