@@ -23,7 +23,7 @@ namespace IranJob.WebApi.Models
         {
             Id = job.Id;
             Title = job.Title;
-            int pastTimeDay = (DateTime.Now.Day * DateTime.Now.Month) - (job.PublishDate.Day * job.PublishDate.Month);
+            int pastTimeDay = (int) (DateTime.Now - job.PublishDate).TotalDays;
             if (pastTimeDay == 0)
                 PastTime = "امروز";
             else if (pastTimeDay == 1)
@@ -34,7 +34,7 @@ namespace IranJob.WebApi.Models
             ContractType = job.ContractType;
             MinimumSalary = job.MinimumSalary;
             CompanyName = job.Company.Name;
-            CompanyImage = ImagePaths.CompaniesPath + job.Company.ImageName;
+            CompanyImage = FilePaths.CompaniesPath + job.Company.ImageName;
             Province = job.Province.Name;
         }
 

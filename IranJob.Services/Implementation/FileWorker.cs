@@ -17,7 +17,7 @@ namespace IranJob.Services.Implementation
         {
             string name = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             path = Path.Combine(_rootPath, path, name);
-            using Stream stream = new FileStream(path, FileMode.Create);
+            await using Stream stream = new FileStream(path, FileMode.Create);
             await file.CopyToAsync(stream);
             return name;
         }

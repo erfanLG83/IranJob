@@ -15,12 +15,16 @@ namespace IranJob.WebApi.Models
         public int JobId { get; set; }
         public string JobTitle { get; set; }
         public bool IsSeened { get; set; }
+        public string ApplicantMessage { get; set; }
+        public string PhoneNumber { get; set; }
         public string CompanyName { get; set; }
         public string Date { get; set; }
         public string JobStatus { get; set; }
 
         public JobRequestDetailsModel(JobRequest request)
         {
+            ApplicantMessage = request.ApplicantMessage;
+            PhoneNumber = request.PhoneNumber;
             Id = request.Id;
             JobId = request.JobId;
             JobTitle = $"{request.Job.Title} ({request.Job.Province.Name})";

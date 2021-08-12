@@ -22,11 +22,11 @@ namespace IranJob.Services.Implementation
         public async Task<string> GenerateTokenAsync(AppUser user)
         {
             var securityKey = Encoding.UTF8.GetBytes("1234567890asdfgh");
-            var encryptionKey = Encoding.UTF8.GetBytes("qwsadfrewtyh4532");
-            var encryptionCredentials = new EncryptingCredentials(
-                    new SymmetricSecurityKey(encryptionKey),
-                    SecurityAlgorithms.Aes128KW, SecurityAlgorithms.Aes128CbcHmacSha256
-                );
+            //var encryptionKey = Encoding.UTF8.GetBytes("qwsadfrewtyh4532");
+            //var encryptionCredentials = new EncryptingCredentials(
+            //        new SymmetricSecurityKey(encryptionKey),
+            //        SecurityAlgorithms.Aes128KW, SecurityAlgorithms.Aes128CbcHmacSha256
+            //    );
             var signinCredentials = new SigningCredentials(
                     key: new SymmetricSecurityKey(securityKey),
                     SecurityAlgorithms.HmacSha256Signature
@@ -40,7 +40,7 @@ namespace IranJob.Services.Implementation
                 Expires = DateTime.Now.AddDays(1),
                 SigningCredentials = signinCredentials,
                 Subject = new ClaimsIdentity(await GetClaimsAsync(user)),
-                EncryptingCredentials = encryptionCredentials
+                //EncryptingCredentials = encryptionCredentials
             };
             var tokenHandler = new JwtSecurityTokenHandler();
             var securityToken = tokenHandler.CreateToken(tokenDescriptor);
@@ -52,11 +52,15 @@ namespace IranJob.Services.Implementation
             {
                 new Claim(ClaimTypes.NameIdentifier , user.Id),
                 new Claim(ClaimTypes.Name , user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
+                new Claim("fullname",user.FullName),
             };
+            if(user.ResumeFileName != null)
+                claims.Add(
+                    new Claim("resume_file", FilePaths.ResumeFilesPath + user.ResumeFileName));
             if (user.PhoneNumber != null)
                 claims.Add(
-                    new Claim(ClaimTypes.MobilePhone, user.PhoneNumber));
+                    new Claim("mobile_phone", user.PhoneNumber));
             if (user.SecurityStamp != null)
                 claims.Add(
                     new Claim(new ClaimsIdentityOptions().SecurityStampClaimType, user.SecurityStamp));

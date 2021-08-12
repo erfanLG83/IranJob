@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using IranJob.Domain.Auth;
 using IranJob.Services.Api;
+using IranJob.Services.AutoMapper;
 using IranJob.Services.Contract;
 using IranJob.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace IranJob.WebApi.Controllers
 {
@@ -18,9 +17,11 @@ namespace IranJob.WebApi.Controllers
     {
         private readonly IAppUserManager _userManager;
         private readonly IJwtService _jwtService;
+        private readonly IMapper _mapper;
 
-        public AuthController(IAppUserManager userManager,IJwtService jwtService)
+        public AuthController(IAppUserManager userManager, IJwtService jwtService, IMapper mapper)
         {
+            _mapper = mapper;
             _jwtService = jwtService;
             _userManager = userManager;
         }
@@ -36,9 +37,7 @@ namespace IranJob.WebApi.Controllers
                 return new BadRequestResult();
             return new
             {
-                token= await _jwtService.GenerateTokenAsync(user),
-                userName=user.UserName,
-                fullName=user.FullName
+                token = await _jwtService.GenerateTokenAsync(user)
             };
         }
         [Route("[action]")]
@@ -53,25 +52,25 @@ namespace IranJob.WebApi.Controllers
                 Id = Guid.NewGuid().ToString(),
                 UserName = signUp.UserName
             };
-            var result = await _userManager.CreateAsync(user,signUp.Password);
+            var result = await _userManager.CreateAsync(user, signUp.Password);
             if (!result.Succeeded)
             {
-                HttpContext.Response.StatusCode = 400;
+                //HttpContext.Response.StatusCode = 400;
                 return BadRequest(result.Errors);
             }
-                //return new ApiResult<object>(false,ApiResultStatusCode.BadRequest,
-                //    null,
-                //    result.Errors.Select(x=>x.Description).ToList()
-                //    );
-                HttpContext.Response.StatusCode = 201;
-            return Created("~/api/auth/signup",signUp);
+            //return new ApiResult<object>(false,ApiResultStatusCode.BadRequest,
+            //    null,
+            //    result.Errors.Select(x=>x.Description).ToList()
+            //    );
+            HttpContext.Response.StatusCode = 201;
+            return Created("~/api/auth/signup", signUp);
         }
 
-        [HttpGet]
-        [Authorize]
-        public ApiResult TestAuthorize()
-        {
-            return Ok();
-        }
+        //[HttpPost]
+        //[Route("[action]")]
+        //public ApiResult<ChildViewModel> Test(Child child)
+        //{
+        //    return Ok(_mapper.Map<ChildViewModel>(child));
+        //}
     }
 }

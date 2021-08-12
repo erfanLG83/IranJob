@@ -28,7 +28,7 @@ namespace IranJob.Services.Middlewares
             List<string> messages = new List<string>();
             HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
             ApiResultStatusCode apiResultStatus = ApiResultStatusCode.ServerError;
-            var isDevlopement = _configuration["ShowExpetions"] == "true";
+            var isDevlopement = _configuration["ShowExceptions"] == "true";
             try
             {
                 await _next(context);

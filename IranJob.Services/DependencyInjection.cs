@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using IranJob.Domain.Auth;
 using IranJob.Persistence;
 using IranJob.Services.Api;
+using IranJob.Services.AutoMapper;
 using IranJob.Services.Contract;
 using IranJob.Services.Exeptions;
 using IranJob.Services.Features;
@@ -26,6 +27,7 @@ namespace IranJob.Services
             services.AddScoped<IJobRepository, JobRepository>();
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IEmailSender, EmailSender>();
+            services.AddAutoMapper(options => options.AddProfile<MappingProfile>());
             return services;
         }
         public static IServiceCollection AddIdentityServices(this IServiceCollection services)
@@ -60,7 +62,7 @@ namespace IranJob.Services
             }).AddJwtBearer(options =>
             {
                 var secretkey = Encoding.UTF8.GetBytes("1234567890asdfgh");
-                var encryptionkey = Encoding.UTF8.GetBytes("qwsadfrewtyh4532");
+                //var encryptionkey = Encoding.UTF8.GetBytes("qwsadfrewtyh4532");
                 var validationParameters = new TokenValidationParameters
                 {
                     RequireSignedTokens = true,
@@ -77,7 +79,7 @@ namespace IranJob.Services
                     ValidateIssuer = true, //default : false
                     ValidIssuer = "IranJob",
 
-                    TokenDecryptionKey = new SymmetricSecurityKey(encryptionkey)
+                   // TokenDecryptionKey = new SymmetricSecurityKey(encryptionkey)
                 };
 
                 options.RequireHttpsMetadata = false;

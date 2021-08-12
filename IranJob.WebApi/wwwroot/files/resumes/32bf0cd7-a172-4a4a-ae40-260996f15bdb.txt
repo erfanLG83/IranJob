@@ -1,0 +1,12 @@
+^Ow7d81e
+erfanlas_PrgHomeUser
+,
+  "ConnectionStrings": {
+    "PrgHome": "Server=.\MSSQLSERVER2016;Database=erfanlas_PrgHome;User ID=erfanlas_PrgHomeUser;Password=^Ow7d81e;trusted_Connection=True"
+  }
+
+bookshop :
+erfanlas_BookShopDB
+.\MSSQLSERVER2019
+erfanlas_BookShopUser
+%U73odo9

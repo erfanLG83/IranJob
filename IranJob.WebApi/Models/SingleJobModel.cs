@@ -1,6 +1,7 @@
-﻿using System;
-using IranJob.Domain.Entities;
+﻿using IranJob.Domain.Entities;
+using IranJob.Services;
 using IranJob.Services.Api;
+using System;
 
 namespace IranJob.WebApi.Models
 {
@@ -40,9 +41,9 @@ namespace IranJob.WebApi.Models
             CompanyId = job.CompanyId;
             CompanyName = job.Company.Name;
             CompanyDescription = job.Description;
-            CompanyImage = ImagePaths.CompaniesPath + job.Company.ImageName;
+            CompanyImage = FilePaths.CompaniesPath + job.Company.ImageName;
             Description = job.Description;
-            int pastTimeDay = (DateTime.Now.Day * DateTime.Now.Month) - (job.PublishDate.Day * job.PublishDate.Month);
+            int pastTimeDay = (int) (DateTime.Now - job.PublishDate).TotalDays; 
             if (pastTimeDay == 0)
                 PastTime = "امروز";
             else if (pastTimeDay == 1)

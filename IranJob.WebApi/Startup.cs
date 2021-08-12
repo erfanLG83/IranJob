@@ -2,17 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using Hangfire;
 using Hangfire.SqlServer;
 using IranJob.Persistence;
 using IranJob.Services;
 using IranJob.Services.Api;
+using IranJob.Services.Contract;
+using IranJob.Services.Implementation;
 using IranJob.Services.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 
@@ -34,6 +38,11 @@ namespace IranJob.WebApi
             services.AddIdentityServices();
             services.AddJwtAuthentication();
             services.AddControllers();
+            services.AddScoped<IFileWorker, FileWorker>(provider =>
+            {
+                var root = provider.GetService<IHostEnvironment>().ContentRootPath+"/wwwroot" + "/files/";
+                return new FileWorker(root);
+            });
             services.AddScoped<IranJobDbContext>();
             services.AddSwaggerGen(options =>
             {
@@ -53,7 +62,6 @@ namespace IranJob.WebApi
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
-
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
                     {
@@ -124,7 +132,20 @@ namespace IranJob.WebApi
             app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api"),
                 appBuilder =>
                 {
-                    if(Configuration["ShowExpetions"]=="true")
+                    //appBuilder.UseExceptionHandler(new ExceptionHandlerOptions
+                    //{
+                    //    ExceptionHandler = (async context =>
+                    //    {
+                    //        context.Response.StatusCode = 500;
+                    //        context.Response.Redirect("/api/jobs");
+                    //        await Task.CompletedTask;
+                    //    })
+                    //    //ExceptionHandler = context =>
+                    //    //{
+                    //    //    context.Response.Redirect("/");
+                    //    //};
+                    //});
+                    if (Configuration["ShowExceptions"] =="true")
                         appBuilder.UseDeveloperExceptionPage();
                 }
             );
